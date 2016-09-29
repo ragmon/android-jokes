@@ -1,6 +1,8 @@
-package com.ragmon.jokes;
+package com.ragmon.jokes.joke;
 
-public class Joke {
+import java.io.Serializable;
+
+public class Joke implements Serializable {
 
     public int id;
     public String title;

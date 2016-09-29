@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Jokes</string>
+
+    <string name="open_database_manager">Менеджер БД</string>
 </resources>

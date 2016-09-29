@@ -1,16 +1,21 @@
-package com.ragmon.jokes;
+package com.ragmon.jokes.category;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ragmon.jokes.R;
+
 import java.util.ArrayList;
 
 
 public class CategoryListAdapter extends BaseAdapter {
+    private static final String _TAG = CategoryListAdapter.class.getSimpleName();
+
 
     Context context;
     LayoutInflater lInflater;
@@ -19,7 +24,8 @@ public class CategoryListAdapter extends BaseAdapter {
     public CategoryListAdapter(Context context, ArrayList<Category> categories) {
         this.context = context;
         this.categories = categories;
-        this.lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        this.lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE); // maybe error here?
+        this.lInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -34,20 +40,22 @@ public class CategoryListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return i;
+        return categories.get(i).id;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = lInflater.inflate(R.layout.category_list_item, viewGroup, false);
+
+            Category category = getItem(i);
+
+            TextView categoryTitle = (TextView) view.findViewById(R.id.categoryItemTitle);
+
+            // Fill view
+            categoryTitle.setText(category.title);
         }
 
-        Category category = getItem(i);
-
-        // Fill view
-        ((TextView)view.findViewById(R.id.categoryItemTitle)).setText(category.title);
-
-        return null;
+        return view;
     }
 }
