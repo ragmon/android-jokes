@@ -1,6 +1,8 @@
 INSERT INTO `joke` (id,title,category_id,content) VALUES (6,'Прикол №6 (html)',8,'
 <html>
-    <head><title></title></head>
+    <head>
+        <link rel="stylesheet" type="text/css" href="default-theme.css">
+    </head>
     <body>
         <h1>H1 Title</h1>
         <img src="http://risovach.ru/upload/2013/04/mem/petrosyanych_16294292_orig_.jpg" alt="" />

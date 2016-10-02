@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends SherlockFragmentActivity
         implements CategoryListFragment.OnCategoryListInteractionListener,
-                   JokeListFragment.OnJokeListInteractionListener,
-                   FragmentManager.OnBackStackChangedListener
+                   JokeListFragment.OnJokeListInteractionListener
+//        , FragmentManager.OnBackStackChangedListener
 {
     private static final String _TAG = MainActivity.class.getSimpleName();
 
@@ -45,23 +45,23 @@ public class MainActivity extends SherlockFragmentActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Listen for changes in the back stack
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
+//        getSupportFragmentManager().addOnBackStackChangedListener(this);
         // Handle when activity is recreated like on orientation Change
-        shouldDisplayHomeUp();
+//        shouldDisplayHomeUp();
 
         // Init SlideMenu
         SlidingMenu menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.LEFT);
-        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
         menu.setFadeDegree(0.35f);
         menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         menu.setMenu(R.layout.sidemenu);
         menu.setBehindWidthRes(R.dimen.slidingmenu_behind_width);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.contentFragment, new CategoryListFragment())
+                .replace(R.id.contentFragment, new CategoryListFragment())
                 .commit();
     }
 
@@ -125,7 +125,7 @@ public class MainActivity extends SherlockFragmentActivity
         // Have sub level categories
         if (categories.size() > 0) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.contentFragment, CategoryListFragment.newInstance(categories))
+                    .replace(R.id.contentFragment, CategoryListFragment.newInstance(categories))
                     .addToBackStack(null)
                     .commit();
         }
@@ -134,31 +134,31 @@ public class MainActivity extends SherlockFragmentActivity
             ArrayList<Joke> jokes = DBHelper.getJokeList(db, category.id);
             Log.d(_TAG, "Loaded jokes count: " + jokes.size());
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.contentFragment, JokeListFragment.newInstance(jokes))
+                    .replace(R.id.contentFragment, JokeListFragment.newInstance(jokes))
                     .addToBackStack(null)
                     .commit();
         }
     }
 
     @Override
-    public void onJokeListItemSelect(Joke joke) {
+    public void onJokeListItemSelect(Joke joke, ArrayList<Joke> categoryJokesList, int currentJokeIndex) {
         Log.d(_TAG, "Selected joke with ID: " + joke.id);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.contentFragment, JokeFragment.newInstance(joke))
+                .replace(R.id.contentFragment, JokeFragment.newInstance(joke, categoryJokesList, currentJokeIndex))
                 .addToBackStack(null)
                 .commit();
     }
 
-    @Override
-    public void onBackStackChanged() {
-        shouldDisplayHomeUp();
-    }
+//    @Override
+//    public void onBackStackChanged() {
+//        shouldDisplayHomeUp();
+//    }
 
-    public void shouldDisplayHomeUp() {
-        Log.d(_TAG, "Back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
-        // Enable Up button only  if there are entries in the back stack
-        boolean canback = getSupportFragmentManager().getBackStackEntryCount() > 0;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
-    }
+//    public void shouldDisplayHomeUp() {
+//        Log.d(_TAG, "Back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
+//        // Enable Up button only  if there are entries in the back stack
+//        boolean canback = getSupportFragmentManager().getBackStackEntryCount() > 0;
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+//    }
 
 }

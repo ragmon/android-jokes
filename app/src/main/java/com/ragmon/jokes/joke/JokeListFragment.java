@@ -48,10 +48,15 @@ public class JokeListFragment extends SherlockFragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             if (mListener != null) {
-                mListener.onJokeListItemSelect((Joke) adapterView.getItemAtPosition(i));
+                Joke joke = (Joke) adapterView.getItemAtPosition(i);
+                mListener.onJokeListItemSelect(joke, jokes, i);
             }
         }
     };
+
+    public ArrayList<Joke> getJokesList() {
+        return jokes;
+    }
 
     public static JokeListFragment newInstance(ArrayList<Joke> jokes) {
         JokeListFragment jokeListFragment = new JokeListFragment();
@@ -61,7 +66,7 @@ public class JokeListFragment extends SherlockFragment {
     }
 
     public interface OnJokeListInteractionListener {
-        void onJokeListItemSelect(Joke joke);
+        void onJokeListItemSelect(Joke joke, ArrayList<Joke> categoryJokesList, int currentJokeIndex);
     }
 
 }
