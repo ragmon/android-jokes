@@ -1,5 +1,6 @@
 package com.ragmon.jokes;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -9,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.ragmon.jokes.category.Category;
+import com.ragmon.jokes.favorite.Favorite;
 import com.ragmon.jokes.joke.Joke;
 
 import java.io.BufferedReader;
@@ -29,7 +31,15 @@ public class DBHelper extends SQLiteOpenHelper {
      * P.S. And don't forget for "assets/upgrade-v{VERSION}.sql" file.
      * Other previous versions sql files also must be exists from zero to current version number.
      ******************************************************************************/
-    public static final int VERSION = 2;
+    public static final int VERSION = 1;
+
+
+    /**
+     * Table names constants.
+     */
+    public static final String TABLE_JOKES = "joke";
+    public static final String TABLE_FAVORITE = "favorite";
+    public static final String TABLE_CATEGORY = "category";
 
 
     private Context context;
@@ -127,15 +137,14 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static ArrayList<Category> getCategoryList(SQLiteDatabase db, int parentId) {
-        Log.d(_TAG, "[getCategoryList] db:" + db.toString() + "; parentId = "  + parentId);
         Cursor cur = db.rawQuery("select * from category where parent_id = ?",
                 new String[]{ String.valueOf(parentId) });
-        Log.d(_TAG, "[getCategoryList] cur: " + cur.toString());
 
         ArrayList<Category> categories = new ArrayList<Category>();
         if (cur != null) {
             int colId = cur.getColumnIndex("id");
             int colTitle = cur.getColumnIndex("title");
+            int colIcon = cur.getColumnIndex("icon");
 
             cur.moveToFirst();
 
@@ -143,8 +152,9 @@ public class DBHelper extends SQLiteOpenHelper {
             for (int i = 0; i < cur.getCount(); i++) {
                 int id = cur.getInt(colId);
                 String title = cur.getString(colTitle);
+                String icon = cur.getString(colIcon);
 
-                Category category = new Category(id, title, parentId);
+                Category category = new Category(id, title, parentId, icon);
                 categories.add(category);
 
                 cur.moveToNext();
@@ -165,6 +175,7 @@ public class DBHelper extends SQLiteOpenHelper {
             int colId = cur.getColumnIndex("id");
             int colTitle = cur.getColumnIndex("title");
             int colContent = cur.getColumnIndex("content");
+            int colIsViewed = cur.getColumnIndex("is_viewed");
 
             cur.moveToFirst();
 
@@ -173,8 +184,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 int id = cur.getInt(colId);
                 String title = cur.getString(colTitle);
                 String content = cur.getString(colContent);
+                boolean isViewed = cur.getInt(colIsViewed) != 0;
 
-                Joke joke = new Joke(id, title, categoryId, content);
+                Joke joke = new Joke(id, title, categoryId, content, isViewed);
                 jokes.add(joke);
 
                 cur.moveToNext();
@@ -196,16 +208,108 @@ public class DBHelper extends SQLiteOpenHelper {
                 int colTitle = cur.getColumnIndex("title");
                 int colCategoryId = cur.getColumnIndex("category_id");
                 int colContent = cur.getColumnIndex("content");
+                int colIsViewed = cur.getColumnIndex("is_viewed");
 
                 String title = cur.getString(colTitle);
                 int categoryId = cur.getInt(colCategoryId);
                 String content = cur.getString(colContent);
+                boolean isViewed = cur.getInt(colIsViewed) != 0;
 
-                joke = new Joke(id, title, categoryId, content);
+                joke = new Joke(id, title, categoryId, content, isViewed);
             }
         }
 
         return joke;
+    }
+
+    public static boolean addFavorite(SQLiteDatabase db, Favorite favorite) {
+        ContentValues v = new ContentValues();
+        v.put("joke_id", favorite.jokeId);
+
+        return db.insert("favorite", null, v) > 0;
+    }
+
+    public static ArrayList<Favorite> getFavoriteList(SQLiteDatabase db) {
+        Cursor cur = db.rawQuery("select * from favorite", null);
+
+        ArrayList<Favorite> favorites = new ArrayList<Favorite>();
+        if (cur != null) {
+            int colId = cur.getColumnIndex("id");
+            int colJokeId = cur.getColumnIndex("joke_id");
+
+            cur.moveToFirst();
+
+            // iterate rows
+            for (int i = 0; i < cur.getCount(); i++) {
+                int id = cur.getInt(colId);
+                int jokeId = cur.getInt(colJokeId);
+
+                Favorite favorite = new Favorite(id, jokeId);
+                favorites.add(favorite);
+
+                cur.moveToNext();
+            }
+
+            cur.close();
+        }
+
+        return favorites;
+    }
+
+    public static Favorite getFavorite(SQLiteDatabase db, int id) {
+        Cursor cur = db.rawQuery("select * from favorite where id = ? limit 1",
+                new String[] { String.valueOf(id) });
+
+        Favorite favorite = null;
+        if (cur != null) {
+            if (cur.moveToFirst()) {
+                int colJokeId = cur.getColumnIndex("joke_id");
+
+                int jokeId = cur.getInt(colJokeId);
+
+                favorite = new Favorite(id, jokeId);
+            }
+        }
+
+        return favorite;
+    }
+
+    public static Favorite getFavoriteByJokeId(SQLiteDatabase db, int jokeId) {
+        Cursor cur = db.rawQuery("select * from favorite where joke_id = ? limit 1",
+                new String[] { String.valueOf(jokeId) });
+
+        Favorite favorite = null;
+        if (cur != null) {
+            if (cur.moveToFirst()) {
+                int colId = cur.getColumnIndex("id");
+
+                int id = cur.getInt(colId);
+
+                favorite = new Favorite(id, jokeId);
+            }
+        }
+
+        return favorite;
+    }
+
+    public static boolean deleteFavorite(SQLiteDatabase db, int id) {
+        return db.delete("favorite", "id=?", new String[]{ String.valueOf(id) }) > 0;
+    }
+
+    public static ArrayList<Joke> getJokeListFromFavoritesList(ArrayList<Favorite> favorites) {
+        ArrayList<Joke> jokes = new ArrayList<Joke>();
+        for (Favorite favorite: favorites) {
+            jokes.add(favorite.getJoke());
+        }
+
+        return jokes;
+    }
+
+    public static boolean setJokeViewedStatus(SQLiteDatabase db, Joke joke, boolean isViewed) {
+        ContentValues v = new ContentValues();
+        v.put("is_viewed", isViewed);
+
+        return db.update(TABLE_JOKES, v, "id=?", new String[]{ String.valueOf(joke.id) }) > 0;
     }
 
 

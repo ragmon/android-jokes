@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="TAG_JOKE" type="id" />
+
+    <item name="TAG_FAVORITE_STATUS" type="id" />
+    <item name="TAG_FAVORITE" type="id" />
+    <item name="TAG_FAVORITE_LIST" type="id" />
+    <item name="TAG_ADAPTER" type="id" />
+    <item name="TAG_JOKE_INDEX" type="id" />
+</resources>

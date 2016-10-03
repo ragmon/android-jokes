@@ -1,7 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/mmGroupDebug">
+
+        <item
+            android:id="@+id/mmItemDatabaseManager"
+            android:title="@string/open_database_manager"
+            />
+    </group>
+
+    <group
+        android:visible="false"
+        android:id="@+id/mmGroupJoke">
+
+        <item
+            android:id="@+id/mmItemAddRemoveFavorite"
+            android:title="@string/add_to_favorites"
+            android:icon="@drawable/heart_inactive"
+            android:showAsAction="always"
+            />
+        <item
+            android:id="@+id/mmItemShare"
+            android:title="@string/share"
+            android:icon="@android:drawable/ic_menu_share"
+            android:showAsAction="always"
+            />
+        <item
+            android:id="@+id/mmItemCopyToClipboard"
+            android:title="@string/copy_to_clipboard"
+            android:showAsAction="always"
+            android:icon="@drawable/copy_to_clipboard"
+            />
+    </group>
+
     <item
-        android:id="@+id/mmItemDatabaseManager"
-        android:title="@string/open_database_manager"
+        android:id="@+id/mmItemFavorites"
+        android:title="@string/favorites"
+        android:icon="@drawable/favorites"
+        android:showAsAction="always"
         />
 </menu>

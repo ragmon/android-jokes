@@ -1,12 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-    <TextView
-        android:id="@+id/jokeItemTitle"
+    <LinearLayout
+        android:id="@+id/jokeItemInfoLayout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp" />
+        android:layout_weight="2"
+        >
+
+        <TextView
+            android:id="@+id/jokeItemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp"
+            android:text="Joke item title"
+            />
+
+        <TextView
+            android:id="@+id/jokeItemIsViewed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/joke_is_not_viewed"
+            android:textColor="@color/abs__bright_foreground_disabled_holo_light"
+            android:paddingBottom="15dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/jokeItemBtnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="8"
+        android:padding="10dp"
+        android:src="@drawable/heart_inactive"
+        android:cropToPadding="true"
+        />
 
 </LinearLayout>

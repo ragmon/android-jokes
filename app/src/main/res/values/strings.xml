@@ -1,6 +1,30 @@
 <resources>
     <string name="app_name">Jokes</string>
 
+    <!-- Main menu -->
     <string name="open_database_manager">Менеджер БД</string>
-    <string name="next">Следующая</string>
+    <string name="favorites">Избранное</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="share">Поделится</string>
+    <string name="copy_to_clipboard">Скопировать в буфер обмена</string>
+
+    <!-- Start screen -->
+    <string name="start_using_app">Начать использование</string>
+    <string name="license_agree_label">Я согласен с &lt;a href="view_license_text"&gt;лицензионым соглашением&lt;/a&gt;.</string>
+    <string name="you_must_agree_license">Вы должны подтвердить лицензионное соглашение.</string>
+    <string name="welcome_message">Добро пожаловать!</string>
+
+    <!-- Favorites -->
+    <string name="error_delete_from_favorites">Ошибка при удаление из избраных.</string>
+
+    <!-- Jokes list -->
+    <string name="joke_is_viewed">Прочитано</string>
+    <string name="joke_is_not_viewed">Не прочитано</string>
+
+    <!-- Category list -->
+    <string name="category_title_template">%s &#187;</string>
+
+    <!-- Global -->
+    <string name="share_title">Отправить через</string>
+    <string name="text_copied_to_clipboard">Текст скопирован в буфер обмена.</string>
 </resources>

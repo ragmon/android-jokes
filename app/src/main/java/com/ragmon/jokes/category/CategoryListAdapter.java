@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ragmon.jokes.R;
@@ -24,7 +25,6 @@ public class CategoryListAdapter extends BaseAdapter {
     public CategoryListAdapter(Context context, ArrayList<Category> categories) {
         this.context = context;
         this.categories = categories;
-//        this.lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE); // maybe error here?
         this.lInflater = LayoutInflater.from(context);
     }
 
@@ -50,10 +50,18 @@ public class CategoryListAdapter extends BaseAdapter {
 
             Category category = getItem(i);
 
+            ImageView categoryIcon = (ImageView) view.findViewById(R.id.categoryItemIcon);
             TextView categoryTitle = (TextView) view.findViewById(R.id.categoryItemTitle);
 
+            // Detect icon resource ID
+            String iconStringIdentifier = (category.icon == null || category.icon.isEmpty())
+                    ? "default_category"
+                    : category.icon;
+            int iconIdentifier = context.getResources().getIdentifier(iconStringIdentifier, "drawable", context.getPackageName());
+
             // Fill view
-            categoryTitle.setText(category.title);
+            categoryIcon.setImageResource(iconIdentifier);
+            categoryTitle.setText(context.getString(R.string.category_title_template, category.title));
         }
 
         return view;
