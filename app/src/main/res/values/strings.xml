@@ -27,4 +27,5 @@
     <!-- Global -->
     <string name="share_title">Отправить через</string>
     <string name="text_copied_to_clipboard">Текст скопирован в буфер обмена.</string>
+    <string name="back">&#171; Назад</string>
 </resources>

@@ -181,7 +181,6 @@ public class JokeFragment extends SherlockFragment {
                     ClipData clip = ClipData.newPlainText(TAG, textContent);
                     clipboard.setPrimaryClip(clip);
                 } else {
-                    getSherlockActivity();
                     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)
                             getSherlockActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                     clipboard.setText(textContent);

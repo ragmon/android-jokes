@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -54,6 +54,7 @@ public class MainActivity extends SherlockFragmentActivity
 
 
     private SQLiteDatabase db;
+    private SlidingMenu slidingMenu;
 
 
     @Override
@@ -77,17 +78,18 @@ public class MainActivity extends SherlockFragmentActivity
 //        });
         // Handle when activity is recreated like on orientation Change
 //        shouldDisplayHomeUp();
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         // Init SlideMenu
-        SlidingMenu menu = new SlidingMenu(this);
-        menu.setMode(SlidingMenu.LEFT);
-        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-        menu.setFadeDegree(0.35f);
-        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-        menu.setMenu(R.layout.sidemenu);
-        menu.setBehindWidthRes(R.dimen.slidingmenu_behind_width);
-        menu.setShadowWidthRes(R.dimen.shadow_width);
-        menu.setShadowDrawable(R.drawable.navbar_shadow);
+        slidingMenu = new SlidingMenu(this);
+        slidingMenu.setMode(SlidingMenu.LEFT);
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        slidingMenu.setFadeDegree(0.35f);
+        slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        slidingMenu.setMenu(R.layout.sidemenu);
+        slidingMenu.setBehindWidthRes(R.dimen.slidingmenu_behind_width);
+        slidingMenu.setShadowWidthRes(R.dimen.shadow_width);
+        slidingMenu.setShadowDrawable(R.drawable.navbar_shadow);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.contentFragment, new CategoryListFragment())
@@ -163,6 +165,10 @@ public class MainActivity extends SherlockFragmentActivity
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                slidingMenu.showMenu();
+                return true;
+
             case R.id.mmItemDatabaseManager:
                 Log.d(_TAG, "-- Show Database Manager --");
                 Intent dbmanager = new Intent(this, AndroidDatabaseManager.class);
@@ -270,6 +276,7 @@ public class MainActivity extends SherlockFragmentActivity
     @Override
     public void onFavoriteListItemRemoveClick(Favorite favorite, ArrayList<Favorite> favoriteList, FavoriteListAdapter adapter) {
         Log.d(_TAG, "Delete request for favorite item with ID: " + favorite.id);
+        Log.d(_TAG, "Favorite joke ID: " + favorite.jokeId);
 
         if (DBHelper.deleteFavorite(db, favorite.id)) {
             Log.d(_TAG, "Success delete from favorites.");
@@ -280,6 +287,10 @@ public class MainActivity extends SherlockFragmentActivity
             Log.e(_TAG, "Error delete from favorites.");
             Toast.makeText(MainActivity.this, getString(R.string.error_delete_from_favorites), Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void onBackBtnClick(View view) {
+        getSupportFragmentManager().popBackStack();
     }
 
 //    @Override
