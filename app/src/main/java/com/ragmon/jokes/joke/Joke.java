@@ -12,13 +12,15 @@ public class Joke implements Serializable {
     public int categoryId;
     public String content;
     public boolean isViewed;
+    public String contentType;
 
-    public Joke(int id, String title, int categoryId, String content, boolean isViewed) {
+    public Joke(int id, String title, int categoryId, String content, boolean isViewed, String contentType) {
         this.id = id;
         this.title = title;
         this.categoryId = categoryId;
         this.content = content;
         this.isViewed = isViewed;
+        this.contentType = contentType;
     }
 
     public Favorite getFavorite() {

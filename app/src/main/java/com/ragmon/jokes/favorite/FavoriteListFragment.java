@@ -2,6 +2,7 @@ package com.ragmon.jokes.favorite;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ public class FavoriteListFragment extends SherlockFragment {
     private ArrayList<Favorite> favorites;
     OnFavoriteListInteractionListener mListener;
 
+    ListView listView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.favorite_list_fragment, container, false);
@@ -30,7 +33,7 @@ public class FavoriteListFragment extends SherlockFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Set favorites list view adapter
-        ListView listView = (ListView) view.findViewById(R.id.favoriteList);
+        listView = (ListView) view.findViewById(R.id.favoriteList);
         listView.setAdapter(new FavoriteListAdapter(getSherlockActivity(), favorites, itemRemoveClickListener));
         listView.setOnItemClickListener(itemClickListener);
     }
@@ -67,8 +70,8 @@ public class FavoriteListFragment extends SherlockFragment {
             if (mListener != null) {
                 Favorite favorite = (Favorite) view.getTag(R.id.TAG_FAVORITE);
                 ArrayList<Favorite> favoriteList = (ArrayList) view.getTag(R.id.TAG_FAVORITE_LIST);
-                FavoriteListAdapter adapter = (FavoriteListAdapter) view.getTag(R.id.TAG_ADAPTER);
-                mListener.onFavoriteListItemRemoveClick(favorite, favoriteList, adapter);
+//                FavoriteListAdapter adapter = (FavoriteListAdapter) view.getTag(R.id.TAG_ADAPTER);
+                mListener.onFavoriteListItemRemoveClick(favorite, favoriteList, listView);
             }
         }
     };
@@ -82,6 +85,6 @@ public class FavoriteListFragment extends SherlockFragment {
 
     public interface OnFavoriteListInteractionListener {
         void onFavoriteListItemSelect(Favorite favorite, ArrayList<Favorite> favorites);
-        void onFavoriteListItemRemoveClick(Favorite favorite, ArrayList<Favorite> favoriteList, FavoriteListAdapter adapter);
+        void onFavoriteListItemRemoveClick(Favorite favorite, ArrayList<Favorite> favoriteList, ListView listView);
     }
 }

@@ -1,4 +1,4 @@
-package com.ragmon.jokes;
+package com.ragmon.jokes.listener;
 
 import android.content.Context;
 import android.view.GestureDetector;

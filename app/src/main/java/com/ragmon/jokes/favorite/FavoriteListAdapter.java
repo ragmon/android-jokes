@@ -1,6 +1,7 @@
 package com.ragmon.jokes.favorite;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class FavoriteListAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     ArrayList<Favorite> favorites;
     View.OnClickListener onRemoveListener;
+
 
     public FavoriteListAdapter(Context context, ArrayList<Favorite> favorites, View.OnClickListener onRemoveListener) {
         this.context = context;
@@ -44,6 +46,19 @@ public class FavoriteListAdapter extends BaseAdapter {
         return favorites.get(i).id;
     }
 
+//    public void removeItem(Favorite favorite) {
+////        int index;
+//        for (int i = 0; i < favorites.size(); i++) {
+//            if (favorites.get(i).id == favorite.id) {
+//                Log.d(_TAG, "Real favorite position: #" + i);
+//
+//                favorites.remove(i);
+//                notifyDataSetChanged();
+//            }
+//        }
+////        favorites.remove(i);
+//    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
@@ -61,6 +76,13 @@ public class FavoriteListAdapter extends BaseAdapter {
             favoriteRemoveBtn.setTag(R.id.TAG_FAVORITE_LIST, favorites);
             favoriteRemoveBtn.setTag(R.id.TAG_ADAPTER, FavoriteListAdapter.this);
             favoriteRemoveBtn.setOnClickListener(onRemoveListener);
+//            favoriteRemoveBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    favorites.remove(0);
+//                    FavoriteListAdapter.this.notifyDataSetChanged();
+//                }
+//            });
         }
 
         return view;

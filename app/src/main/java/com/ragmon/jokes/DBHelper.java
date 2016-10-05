@@ -176,6 +176,7 @@ public class DBHelper extends SQLiteOpenHelper {
             int colTitle = cur.getColumnIndex("title");
             int colContent = cur.getColumnIndex("content");
             int colIsViewed = cur.getColumnIndex("is_viewed");
+            int colContentType = cur.getColumnIndex("content_type");
 
             cur.moveToFirst();
 
@@ -185,8 +186,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 String title = cur.getString(colTitle);
                 String content = cur.getString(colContent);
                 boolean isViewed = cur.getInt(colIsViewed) != 0;
+                String contentType = cur.getString(colContentType);
 
-                Joke joke = new Joke(id, title, categoryId, content, isViewed);
+                Joke joke = new Joke(id, title, categoryId, content, isViewed, contentType);
                 jokes.add(joke);
 
                 cur.moveToNext();
@@ -209,13 +211,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 int colCategoryId = cur.getColumnIndex("category_id");
                 int colContent = cur.getColumnIndex("content");
                 int colIsViewed = cur.getColumnIndex("is_viewed");
+                int colContentType = cur.getColumnIndex("content_type");
 
                 String title = cur.getString(colTitle);
                 int categoryId = cur.getInt(colCategoryId);
                 String content = cur.getString(colContent);
                 boolean isViewed = cur.getInt(colIsViewed) != 0;
+                String contentType = cur.getString(colContentType);
 
-                joke = new Joke(id, title, categoryId, content, isViewed);
+                joke = new Joke(id, title, categoryId, content, isViewed, contentType);
             }
         }
 

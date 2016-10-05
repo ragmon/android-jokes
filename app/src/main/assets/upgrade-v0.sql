@@ -3,7 +3,8 @@ CREATE TABLE "joke" (
 	`title`	TEXT NOT NULL,
 	`category_id`	INTEGER NOT NULL,
 	`content`	TEXT NOT NULL,
-	`is_viewed`	INTEGER NOT NULL DEFAULT 0
+	`is_viewed`	INTEGER NOT NULL DEFAULT 0,
+	`content_type` TEXT DEFAULT NULL
 );
 CREATE TABLE `favorite` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

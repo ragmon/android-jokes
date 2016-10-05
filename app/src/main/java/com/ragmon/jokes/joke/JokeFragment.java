@@ -2,7 +2,6 @@ package com.ragmon.jokes.joke;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,10 +20,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ragmon.jokes.DBHelper;
-import com.ragmon.jokes.OnSwipeTouchListener;
+import com.ragmon.jokes.listener.OnSwipeTouchListener;
 import com.ragmon.jokes.R;
 import com.ragmon.jokes.favorite.Favorite;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -110,11 +113,43 @@ public class JokeFragment extends SherlockFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        String content = "";
+        String contentType = "text/html";
+        String charset = "UTF-8";
+
+        if (joke.contentType != null && joke.contentType.equalsIgnoreCase("text/html")) {
+            content = joke.content;
+        } else {
+            try {
+                content = parseTemplate(joke.content);
+            } catch (IOException e) {
+                Log.e(_TAG, "Error parse joke template.", e);
+            }
+        }
+
         WebView webView = (WebView) view.findViewById(R.id.webView);
-        webView.loadDataWithBaseURL("file:///android_asset/", joke.content, "text/html", "UTF-8", null);
+        webView.loadDataWithBaseURL("file:///android_asset/", content, contentType, charset, null);
 
         // Set joke status "VIEWED"
         DBHelper.setJokeViewedStatus(DBHelper.getCurrentDB(), joke, true);
+    }
+
+    private String parseTemplate(String textContent) throws IOException {
+        Log.d(_TAG, "Load joke html template...");
+
+        InputStream in = getSherlockActivity().getAssets().open("joke-template.tpl");
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        reader.close();
+
+        String template = sb.toString();
+        String parsedHtml = String.format(template, textContent);
+
+        return parsedHtml;
     }
 
     @Override

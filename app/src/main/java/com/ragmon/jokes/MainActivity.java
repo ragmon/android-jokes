@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -274,15 +275,29 @@ public class MainActivity extends SherlockFragmentActivity
     }
 
     @Override
-    public void onFavoriteListItemRemoveClick(Favorite favorite, ArrayList<Favorite> favoriteList, FavoriteListAdapter adapter) {
+    public void onFavoriteListItemRemoveClick(Favorite favorite, ArrayList<Favorite> favoriteList, final ListView listView) {
         Log.d(_TAG, "Delete request for favorite item with ID: " + favorite.id);
         Log.d(_TAG, "Favorite joke ID: " + favorite.jokeId);
 
         if (DBHelper.deleteFavorite(db, favorite.id)) {
             Log.d(_TAG, "Success delete from favorites.");
 
+            // It's a hack here!!!
+            // This code must be fixed
+            // hack: create new adapter, because "favoriteList.remove(favorite);adapter.notifyDataSetChanged();" is not worked here?!
+            // that's not good way, but it's works fine.
             favoriteList.remove(favorite);
-            adapter.notifyDataSetChanged();
+            listView.setAdapter(new FavoriteListAdapter(this, favoriteList, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Favorite favorite = (Favorite) view.getTag(R.id.TAG_FAVORITE);
+                    ArrayList<Favorite> favoriteList = (ArrayList) view.getTag(R.id.TAG_FAVORITE_LIST);
+//                    FavoriteListAdapter adapter = (FavoriteListAdapter) view.getTag(R.id.TAG_ADAPTER);
+                    MainActivity.this.onFavoriteListItemRemoveClick(favorite, favoriteList, listView);
+                }
+            }));
+//            adapter.notifyDataSetChanged();
+//            adapter.removeItem(favorite);
         } else {
             Log.e(_TAG, "Error delete from favorites.");
             Toast.makeText(MainActivity.this, getString(R.string.error_delete_from_favorites), Toast.LENGTH_LONG).show();
