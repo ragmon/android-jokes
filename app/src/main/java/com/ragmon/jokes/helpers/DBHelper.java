@@ -1,4 +1,4 @@
-package com.ragmon.jokes;
+package com.ragmon.jokes.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,8 +21,9 @@ import java.util.ArrayList;
 
 
 public class DBHelper extends SQLiteOpenHelper {
-
     private static final String _TAG = DBHelper.class.getSimpleName();
+
+
     public static final String DB_NAME = "jokes.db";
 
 

@@ -1,6 +1,6 @@
 package com.ragmon.jokes.joke;
 
-import com.ragmon.jokes.DBHelper;
+import com.ragmon.jokes.helpers.DBHelper;
 import com.ragmon.jokes.favorite.Favorite;
 
 import java.io.Serializable;

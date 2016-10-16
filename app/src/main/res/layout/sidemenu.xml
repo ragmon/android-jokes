@@ -16,6 +16,15 @@
         android:onClick="onBackBtnClick"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/favorites"
+        android:padding="15dp"
+        android:textSize="18sp"
+        android:onClick="onFavoritesBtnClick"
+        />
+
     <fragment
         android:id="@+id/sidemenuFragment"
         android:layout_width="match_parent"

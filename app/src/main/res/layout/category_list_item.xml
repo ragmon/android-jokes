@@ -17,7 +17,10 @@
         android:id="@+id/categoryItemTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
         android:layout_weight="2"
         android:text="Category title"
         />

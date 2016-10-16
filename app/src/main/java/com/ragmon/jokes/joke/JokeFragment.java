@@ -19,7 +19,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.ragmon.jokes.DBHelper;
+import com.ragmon.jokes.MainActivity;
+import com.ragmon.jokes.helpers.DBHelper;
 import com.ragmon.jokes.listener.OnSwipeTouchListener;
 import com.ragmon.jokes.R;
 import com.ragmon.jokes.favorite.Favorite;
@@ -48,6 +49,26 @@ public class JokeFragment extends SherlockFragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Configure back button.
+        getSherlockActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSherlockActivity().getSupportActionBar().setIcon(android.R.color.transparent);
+        MainActivity.isHomeAsBackBtn = true;
+    }
+
+    @Override
+    public void onPause() {
+        // Configure menu button.
+        getSherlockActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSherlockActivity().getSupportActionBar().setIcon(R.drawable.icon_home);
+        MainActivity.isHomeAsBackBtn = false;
+
+        super.onPause();
     }
 
     @Override
@@ -164,6 +185,7 @@ public class JokeFragment extends SherlockFragment {
         }
 
         menu.setGroupVisible(R.id.mmGroupJoke, true);
+        menu.findItem(R.id.mmItemFavorites).setVisible(false);
     }
 
     @SuppressLint("NewApi")
@@ -172,6 +194,11 @@ public class JokeFragment extends SherlockFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         String textContent;
         switch (item.getItemId()) {
+//            case android.R.id.home:
+//                Log.d(_TAG, "Joke fragment home click");
+//                getSherlockActivity().getSupportFragmentManager().popBackStack();
+//                return true;
+
             case R.id.mmItemAddRemoveFavorite:
                 Log.d(_TAG, "Joke menu item add/remove from favorites click.");
 

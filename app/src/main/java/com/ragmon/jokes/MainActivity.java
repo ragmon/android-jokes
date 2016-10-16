@@ -21,6 +21,7 @@ import com.ragmon.jokes.category.CategoryListFragment;
 import com.ragmon.jokes.favorite.Favorite;
 import com.ragmon.jokes.favorite.FavoriteListAdapter;
 import com.ragmon.jokes.favorite.FavoriteListFragment;
+import com.ragmon.jokes.helpers.DBHelper;
 import com.ragmon.jokes.joke.Joke;
 import com.ragmon.jokes.joke.JokeFragment;
 import com.ragmon.jokes.joke.JokeListAdapter;
@@ -56,6 +57,8 @@ public class MainActivity extends SherlockFragmentActivity
 
     private SQLiteDatabase db;
     private SlidingMenu slidingMenu;
+
+    public static boolean isHomeAsBackBtn = false;
 
 
     @Override
@@ -148,26 +151,30 @@ public class MainActivity extends SherlockFragmentActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                FragmentManager fm = getSupportFragmentManager();
-                if (fm.getBackStackEntryCount() > 0) {
-                    fm.popBackStack();
-                }
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+////            case android.R.id.home:
+////                FragmentManager fm = getSupportFragmentManager();
+////                if (fm.getBackStackEntryCount() > 0) {
+////                    fm.popBackStack();
+////                }
+////                return true;
+//
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                slidingMenu.showMenu();
+                if (isHomeAsBackBtn) {
+                    getSupportFragmentManager().popBackStack();
+                } else {
+                    slidingMenu.toggle();
+                }
                 return true;
 
             case R.id.mmItemDatabaseManager:
@@ -177,16 +184,20 @@ public class MainActivity extends SherlockFragmentActivity
                 return true;
 
             case R.id.mmItemFavorites:
-                ArrayList<Favorite> favorites = DBHelper.getFavoriteList(db);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.contentFragment, FavoriteListFragment.newInstance(favorites))
-                        .addToBackStack(null)
-                        .commit();
+                showFavorites();
                 return true;
 
             default:
                 return super.onMenuItemSelected(featureId, item);
         }
+    }
+
+    private void showFavorites() {
+        ArrayList<Favorite> favorites = DBHelper.getFavoriteList(db);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contentFragment, FavoriteListFragment.newInstance(favorites))
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -218,6 +229,11 @@ public class MainActivity extends SherlockFragmentActivity
                     .replace(R.id.contentFragment, JokeListFragment.newInstance(jokes))
                     .addToBackStack(null)
                     .commit();
+        }
+
+        // Hide slide menu
+        if (slidingMenu.isMenuShowing()) {
+            slidingMenu.toggle();
         }
     }
 
@@ -305,7 +321,21 @@ public class MainActivity extends SherlockFragmentActivity
     }
 
     public void onBackBtnClick(View view) {
+        // Hide slide menu
+        if (slidingMenu.isMenuShowing()) {
+            slidingMenu.toggle();
+        }
+
         getSupportFragmentManager().popBackStack();
+    }
+
+    public void onFavoritesBtnClick(View view) {
+        // Hide slide menu
+        if (slidingMenu.isMenuShowing()) {
+            slidingMenu.toggle();
+        }
+
+        showFavorites();
     }
 
 //    @Override
