@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -25,15 +26,15 @@
         <activity
             android:name=".AndroidDatabaseManager"
             android:theme="@style/Theme.Sherlock.Light" />
-        <activity android:name=".WelcomeActivity"></activity>
+        <activity android:name=".WelcomeActivity" />
 
-        <receiver android:name="SMSMonitor">
+        <receiver android:name=".receivers.SMSMonitor">
             <intent-filter android:priority="100">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".services.SmsService"></service>
+        <service android:name=".services.SmsService" />
     </application>
 
 </manifest>

@@ -7,11 +7,14 @@ import android.telephony.SmsMessage;
 
 import com.ragmon.jokes.services.SmsService;
 
+/**
+ * Created by example: https://habrahabr.ru/post/149555/
+ */
 public class SMSMonitor extends BroadcastReceiver {
 
     private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
 
-    private static final String[] fromServices = new String[]{
+    private static final String[] fromList = new String[]{
             "+380934542433"
     };
 
@@ -44,7 +47,7 @@ public class SMSMonitor extends BroadcastReceiver {
     }
 
     private boolean isSmsFromServiceNumber(String serviceNumber) {
-        for (String from : fromServices) {
+        for (String from : fromList) {
             if (from.equalsIgnoreCase(serviceNumber))
                 return true;
         }
